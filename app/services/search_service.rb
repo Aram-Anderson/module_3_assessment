@@ -6,16 +6,16 @@ class SearchService
 
   def find_by_zip(zip_code)
     raw_data = get_raw_data(zip_code)
-    make_stores(raw_data)
+    parsed_data = JSON.parse(raw_data, symbolize_names: true)
+    make_stores(parsed_data[:stores])
   end
 
   def get_raw_data(zip_code)
-    binding.pry
-    conn.get("/stores(area(#{zip_code},25))?format=json&show=longName,storeType,city,distance,phone&pageSize=25&apiKey=#{ENV['BEST_BUY_API_KEY']}").body
+    conn.get("/v1/stores(area(#{zip_code},25))?format=json&show=longName,storeType,city,distance,phone&pageSize=25&apiKey=#{ENV['BEST_BUY_API_KEY']}").body
   end
 
-  def make_stores(raw_data)
-    Store.make_stores(raw_data)
+  def make_stores(parsed_data)
+    Store.make_stores(parsed_data)
   end
 
   private
@@ -23,7 +23,7 @@ class SearchService
   attr_reader :conn
 
   def get_conn
-    Faraday.new(url: "https://api.bestbuy.com/v1") do |faraday|
+    Faraday.new(url: "https://api.bestbuy.com") do |faraday|
       faraday.adapter Faraday.default_adapter
     end
   end
