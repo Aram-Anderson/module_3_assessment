@@ -12,9 +12,9 @@ class Api::V1::ItemsController < ApplicationController
  end
 
  def create
-   binding.pry
-   if item = Item.create(item_params)
-     render json: :item, status: :success
+   item = Item.new(item_params)
+   if item.save
+     render json: item, status: :created
    end
  end
 
