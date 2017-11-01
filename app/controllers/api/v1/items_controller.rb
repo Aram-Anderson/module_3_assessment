@@ -18,6 +18,13 @@ class Api::V1::ItemsController < ApplicationController
    end
  end
 
+ def destroy
+   item = Item.find(params[:id])
+   if item.destroy
+     head :no_content
+   end
+ end
+
  private
 
  def item_params
