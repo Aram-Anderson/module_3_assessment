@@ -19,6 +19,11 @@
       <li>
         <a href="/orders">Orders</a>
       </li>
-    </ul>
-  </div>
-</nav>
+      <li>  <%= form_tag :search, method: :get do %>
+          <%= text_field_tag :search, "Stores Near You" %>
+          <%= submit_tag "Locate"%>
+          <% end %>
+      </li>
+      </ul>
+    </div>
+  </nav>
